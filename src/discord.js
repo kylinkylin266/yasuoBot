@@ -1,5 +1,5 @@
-const Discord = require("discord.js");
-const client = new Discord.Client();
+import { Client, MessageEmbed } from "discord.js";
+const client = new Client();
 const axios = require("axios");
 import { getInfo, standardlize } from "./function";
 import { MessageAttachment, BufferResolvable } from "discord.js";
@@ -10,24 +10,44 @@ client.on("ready", () => {
 client.on("message", async (msg) => {
   let message = msg.content;
   if (message.substring(0, 1) == "*") {
-    var args = message.substring(1).split(" ");
-    var cmd = args[0];
-    var champion = args[1];
-    console.log(champion);
-    if (cmd === "info") {
-      let info = getInfo(champion).then((res) => {
-        return res;
-      });
-      const icon =
-        "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
-        champion +
-        "_0.jpg";
-      let photo = new Discord.MessageAttachment(icon);
-      msg.reply("Here is " + champion, photo);
+    message = message.replace(/[^a-zA-Z ]/g, "");
+    var args = message.substring(0).split(" ");
+    let cmd = args[0];
+    args.shift();
+    switch (cmd) {
+      case "info":
+        let value = args[0].toString();
+        let info = await getInfo(value).then((res) => {
+          return res.data[value];
+        });
+        console.log(info.name);
+        const name = info.name;
+        const description = info.title;
 
-      // Discord.MessageAttachment(Stream,)
-    }
-    if (cmd === "gay") {
+        const embed = new MessageEmbed()
+          .setAuthor("League of Legends", "https://i.imgur.com/1nCIAUG.png")
+          .setThumbnail(
+            "http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/" +
+              value +
+              ".png"
+          )
+          .setTitle(name + " - " + description)
+          .setColor(0xff0000)
+          .setDescription(info.tags.toString())
+          .addFields(
+            { name: "Ally Tips", value: info.allytips },
+            { name: "Enemy Tips", value: info.enemytips },
+            {
+              name: "Abilitys",
+              value: "gi do",
+            }
+          )
+          .setFooter(
+            "Brought to you by Yasuo Bot",
+            "http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/Yasuo.png"
+          );
+        msg.channel.send(embed);
+        break;
     }
   }
 });

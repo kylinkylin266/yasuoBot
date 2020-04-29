@@ -18,7 +18,6 @@ export const getInfo = async (champion) => {
  */
 export const standardlize = (name) => {
   let _name = name.toLowerCase();
-  _name[0].toUpperCase;
-  console.log(_name);
-  return _name;
+  let final = _name.charAt(0).toUpperCase() + _name.slice(1);
+  return final;
 };
