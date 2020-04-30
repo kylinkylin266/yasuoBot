@@ -1,6 +1,5 @@
 import { Client, MessageEmbed } from "discord.js";
 const client = new Client();
-const axios = require("axios");
 import { getInfo, standardlize } from "./function";
 import { MessageAttachment, BufferResolvable } from "discord.js";
 client.on("ready", () => {
@@ -25,22 +24,58 @@ client.on("message", async (msg) => {
         const description = info.title;
 
         const embed = new MessageEmbed()
-          .setAuthor("League of Legends", "https://i.imgur.com/1nCIAUG.png")
+          .setAuthor(
+            "League of Legends Wiki",
+            "https://i.imgur.com/1nCIAUG.png"
+          )
           .setThumbnail(
             "http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/" +
               value +
               ".png"
           )
-          .setTitle(name + " - " + description)
           .setColor(0xff0000)
+          .setTitle(name + " - " + description)
           .setDescription(info.tags.toString())
           .addFields(
-            { name: "Ally Tips", value: info.allytips },
-            { name: "Enemy Tips", value: info.enemytips },
             {
-              name: "Abilitys",
-              value: "gi do",
+              name: "Ally Tips",
+              value: info.allytips.length > 0 ? info.allytips : "",
+            },
+            {
+              name: "Enemy Tips",
+              value: info.enemytips.length > 0 ? info.enemytips : "",
+            },
+            {
+              name: "Partype",
+              value: info.partype,
+            },
+            { name: "\u200B", value: "\u200B" },
+            {
+              name: "Passive - " + info.passive.name,
+              value: info.passive.description,
+            },
+            {
+              name: "Q - " + info.spells[0].name,
+              value: info.spells[0].description.replace(/(<([^>]+)>)/gi, ""),
+            },
+            {
+              name: "W -" + info.spells[1].name,
+              value: info.spells[1].description.replace(/(<([^>]+)>)/gi, ""),
+            },
+            {
+              name: "E - " + info.spells[2].name,
+              value: info.spells[2].description.replace(/(<([^>]+)>)/gi, ""),
+            },
+            {
+              name: "R - " + info.spells[3].name,
+              value: info.spells[3].description.replace(/(<([^>]+)>)/gi, ""),
             }
+          )
+
+          .setImage(
+            "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" +
+              value +
+              "_0.jpg"
           )
           .setFooter(
             "Brought to you by Yasuo Bot",
