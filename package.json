@@ -5,13 +5,14 @@
   "main": "discord.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --exec babel-node src/discord.js --source-maps"
+    "dev": "nodemon --watch / --exec babel-node app.js --source-maps"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.3",
     "yar": "^9.1.0"
   },
